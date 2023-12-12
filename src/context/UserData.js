@@ -4,7 +4,7 @@ export const UserContext = createContext();
 
 export const UserState = ({ children }) => {
     const [user, setuser] = useState(null);
-    const [subjectList, setsubjectList] = useState(null);
+    const [subjectList, setsubjectList] = useState([]);
     useEffect(() => {
         const checkUser = async () => {
             try {
@@ -13,12 +13,14 @@ export const UserState = ({ children }) => {
                     result = await JSON.parse(result);
                     setuser(result);
                     let subjects = await AsyncStorage.getItem('subjectList');
-                    setsubjectList(subjects);
-                    console.log(result)
+                    subjects = await JSON.parse(subjects);
+                    subjectList.push(...subjects);
+                    console.log(subjectList)
+
                 }
             } catch (error) {
                 setuser(null);
-                setsubjectList(null);
+                setsubjectList([]);
             }
         }
         checkUser()
@@ -30,7 +32,6 @@ export const UserState = ({ children }) => {
             await AsyncStorage.setItem("subjectList", JSON.stringify([]))
             setuser(user);
             setsubjectList([]);
-            console.log(user)
         } catch (error) {
             console.error(error);
         }

@@ -7,12 +7,13 @@ const CreateUser = () => {
     const [error, setError] = useState("");
     const {storeUser}=useUserContext();
     const genders = [
-        { type: "Male", value: "male" },
-        { type: "Female", value: "female" },
+        { type: "Male", value: "Male" },
+        { type: "Female", value: "Female" },
         { type: "Prefer Not to Say", value: "Prefer Not to Say" }
     ]
     const submitDetails =async () => {
-        if(!user['name'] || !user['age'] || !user['gender'] || !user['school']){
+        console.log(user)
+        if(!user['name'] || !user['age'] || user['gender']==='Gender'||!user['gender'] || !user['school']){
             setError(error=>"Enter Correct Details");
             return;
         }
