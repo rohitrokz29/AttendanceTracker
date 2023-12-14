@@ -1,14 +1,17 @@
-import React from 'react'
-import { Pressable, SafeAreaView, Text, View, StyleSheet, FlatList } from 'react-native'
+import React, { useState } from 'react'
+import { Pressable, SafeAreaView, Text, View, StyleSheet, FlatList, Modal } from 'react-native'
 import Heading from './Heading'
 import { useUserContext } from '../context/UserData'
 import SubjectItem from './SubjectItem'
 import { StatusBar } from 'expo-status-bar'
 import NoItem from './NoItem'
+import { Entypo } from '@expo/vector-icons'
+import AddSubjectModal from './AddSubjectModal'
 
-const SubjectList = () => {
+const SubjectList = ({navigation}) => {
     const { subjectList } = useUserContext();
-
+    const [modalVisible, setModalVisible] = useState(false);
+    
     const styles = StyleSheet.create({
         container: {
             marginTop: StatusBar.CurrentHeight || 0
@@ -43,7 +46,10 @@ const SubjectList = () => {
                         const percentage = ((currentPresent * 100.0 / (currentAbsent + currentPresent)).toFixed(2));
 
                         return (
-                            <Pressable key={item['subject']}>
+                            <Pressable 
+                            key={item['subject']}
+                            onPress={()=>navigation.navigate('Subject',{subject:item['subject']})}
+                           >
                                 <SubjectItem
                                     subject={item['subject']}
                                     percentage={percentage}
@@ -55,13 +61,22 @@ const SubjectList = () => {
                     }
                 />
             }
-            <Pressable key="add-subject">
+            <Pressable key="add-subject"
+                onPress={() => setModalVisible(!modalVisible)}
+            >
                 <View style={styles.addButtonView}>
                     <Text style={styles.buttonText}>
                         Add Subject
                     </Text>
                 </View>
             </Pressable>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+            >
+               <AddSubjectModal setModalVisible={setModalVisible} modalVisible={modalVisible}/>
+            </Modal>
         </SafeAreaView>
     )
 }

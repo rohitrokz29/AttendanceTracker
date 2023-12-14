@@ -5,19 +5,19 @@ import { useUserContext } from '../context/UserData';
 const CreateUser = () => {
     const [user, setuser] = useState({ name: "", age: "", gender: '', school: "" });
     const [error, setError] = useState("");
-    const {storeUser}=useUserContext();
+    const { storeUser } = useUserContext();
     const genders = [
         { type: "Male", value: "Male" },
         { type: "Female", value: "Female" },
         { type: "Prefer Not to Say", value: "Prefer Not to Say" }
     ]
-    const submitDetails =async () => {
+    const submitDetails = async () => {
         console.log(user)
-        if(!user['name'] || !user['age'] || user['gender']==='Gender'||!user['gender'] || !user['school']){
-            setError(error=>"Enter Correct Details");
+        if (!user['name'] || !user['age'] || user['gender'] === 'Gender' || !user['gender'] || !user['school']) {
+            setError(error => "Enter Correct Details");
             return;
         }
-        await storeUser(user)   
+        await storeUser(user)
     }
 
     const styles = StyleSheet.create({
@@ -125,13 +125,14 @@ const CreateUser = () => {
                     onChangeText={school => setuser({ ...user, school })}
                     value={user['school']}
                 />
-                <Text style={styles.error}>{error}</Text>
                 <Pressable
                     style={styles.button}
                     onPress={submitDetails}
                 >
                     <Text style={styles.buttonText}>Submit</Text>
                 </Pressable>
+                <Text style={styles.error}>{error}</Text>
+
             </View>
         </ImageBackground>
     )
