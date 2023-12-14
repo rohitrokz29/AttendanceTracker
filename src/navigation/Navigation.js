@@ -8,23 +8,35 @@ import { useUserContext } from "../context/UserData";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import SubjectList from "../components/SubjectList";
+import Subject from "../components/Subject";
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const GetStartedStack = createNativeStackNavigator();
 
 const GetStartedScreens = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='home' component={Home} />
-            <Stack.Screen name='createUser' component={CreateUser} />
-        </Stack.Navigator>
+        <GetStartedStack.Navigator screenOptions={{ headerShown: false }}>
+            <GetStartedStack.Screen name='home' component={Home} />
+            <GetStartedStack.Screen name='createUser' component={CreateUser} />
+        </GetStartedStack.Navigator>
     )
 }
 
+const SubjectListStack=createNativeStackNavigator();
+const SubjectListScreens = () => {
+    return (
+        <SubjectListStack.Navigator screenOptions={{ headerShown: false }}>
+            <SubjectListStack.Screen name="SubjectList" component={SubjectList} />
+            <SubjectListStack.Screen name='Subject' component={Subject} />
+        </SubjectListStack.Navigator>
+    )
+}
+
+
+const Tab = createBottomTabNavigator();
 const AppScreens = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Subjects"
+            initialRouteName="subjectList"
             tabBarOptions={{
                 activeTintColor: '#ff8070',
                 inactiveTintColor: "#fff",
@@ -36,12 +48,12 @@ const AppScreens = () => {
                 }
             }}
             screenOptions={{
-                headerShown:false
+                headerShown: false
             }}
->
+        >
             <Tab.Screen
-                name='Subjects'
-                component={SubjectList}
+                name='subjectList'
+                component={SubjectListScreens}
                 options={{
                     tabBarLabel: "Subjects",
                     tabBarIcon: ({ color, size }) => (
@@ -59,7 +71,7 @@ const AppScreens = () => {
 
                 }}
             />
-        
+
         </Tab.Navigator>
     )
 }
@@ -69,7 +81,8 @@ export default Navigation = () => {
     return (
         <NavigationContainer>
             {
-                user ? <AppScreens /> : <GetStartedScreens />
+                user ? <AppScreens /> :
+                    <GetStartedScreens />
             }
         </NavigationContainer>
     )

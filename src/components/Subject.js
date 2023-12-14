@@ -1,9 +1,9 @@
 import React from 'react'
 import { Text } from 'react-native'
 const Subject = ({navigation,route}) => {
-    const sub=route.params.subject;
-    return (
-    <Text>Subject</Text>
+  const {subject}=route.params;
+  return (
+    <Text>{subject}</Text>
   )
 }
 
