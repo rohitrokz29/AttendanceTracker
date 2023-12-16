@@ -1,13 +1,14 @@
-import React from 'react'
-import { FlatList, SafeAreaView, Text, View, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { FlatList, SafeAreaView, Text, View, StyleSheet, Pressable, Picker } from 'react-native'
 import { useUserContext } from '../context/UserData'
 import { StatusBar } from 'expo-status-bar';
 import SubjectItem from './SubjectItem';
 import NoItem from './NoItem';
 import Heading from './Heading';
+import { Feather } from '@expo/vector-icons';
 
 const UserProfile = () => {
-  const { user, subjectList } = useUserContext();
+  const { user, subjectList, clearData, clearSubjects } = useUserContext();
 
   const styles = StyleSheet.create({
     container: {
@@ -39,19 +40,25 @@ const UserProfile = () => {
       paddingVertical: 5,
       paddingHorizontal: 15
     },
+
+    head: {
+      flexDirection: "row",
+      justifyContent: 'space-evenly',
+      paddingVertical: 15,
+    },
     subjectHeading: {
       fontSize: 15,
       fontFamily: "Georgia, 'Times New Roman', Times, serif",
       fontWeight: "bold",
-      textAlign: "center",
+      textAlign: "right",
       lineHeight: 20,
-      paddingVertical: 15
+      alignSelf: "center"
     }
   })
 
   return (
     <SafeAreaView style={styles.container}>
-      <Heading heading={'Profile'}/>
+      <Heading heading={'Profile'} />
       <View style={styles.detailContainer}>
         <View style={styles.specificDetailView}>
           <Text style={styles.detailHeading}>Name</Text>
@@ -74,13 +81,15 @@ const UserProfile = () => {
         </View>
 
       </View>
-      <Text style={styles.subjectHeading}>Your Attendance Summary</Text>
-
+      <View style={styles.head}>
+        <Text style={styles.subjectHeading}>Your Attendance Summary</Text>
+        <Feather name="list" size={20} />
+      </View>
       <View style={styles.subjectList}>
         <FlatList
           data={subjectList}
-          keyExtractor={(item)=>item.subject}
-          ListEmptyComponent={<NoItem message="You Have No Subjects To Track"/>}
+          keyExtractor={(item) => item.subject}
+          ListEmptyComponent={<NoItem message="You Have No Subjects To Track" />}
           renderItem={({ item }) => {
             let currentAbsent = item['currentAbsent']
             let currentPresent = item['currentPresent']

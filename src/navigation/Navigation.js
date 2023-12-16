@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import SubjectList from "../components/SubjectList";
 import Subject from "../components/Subject";
-
+import Loading from "./Loading";
 const GetStartedStack = createNativeStackNavigator();
 
 const GetStartedScreens = () => {
@@ -21,7 +21,7 @@ const GetStartedScreens = () => {
     )
 }
 
-const SubjectListStack=createNativeStackNavigator();
+const SubjectListStack = createNativeStackNavigator();
 const SubjectListScreens = () => {
     return (
         <SubjectListStack.Navigator screenOptions={{ headerShown: false }}>
@@ -77,13 +77,17 @@ const AppScreens = () => {
 }
 
 export default Navigation = () => {
-    const { user } = useUserContext();
-    return (
-        <NavigationContainer>
-            {
-                user ? <AppScreens /> :
-                    <GetStartedScreens />
-            }
-        </NavigationContainer>
-    )
+
+    const { user, isLoading } = useUserContext();
+
+    return isLoading
+        ? (<Loading />)
+        : (
+            < NavigationContainer >
+                {
+                    user ? <AppScreens /> :
+                        < GetStartedScreens />
+                }
+            </NavigationContainer >
+        )
 }
