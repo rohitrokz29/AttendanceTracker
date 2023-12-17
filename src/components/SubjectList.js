@@ -5,7 +5,6 @@ import { useUserContext } from '../context/UserData'
 import SubjectItem from './SubjectItem'
 import { StatusBar } from 'expo-status-bar'
 import NoItem from './NoItem'
-import { Entypo } from '@expo/vector-icons'
 import AddSubjectModal from './AddSubjectModal'
 
 const SubjectList = ({navigation}) => {
