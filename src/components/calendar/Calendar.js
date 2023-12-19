@@ -9,9 +9,8 @@ const Calendar = ({ subjectData }) => {
     const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
-        console.log(subjectData['startDate'])
-        if (activeDate != subjectData['startDate']) {
-            setActiveDate(new Date(subjectData['startDate']));
+        if (activeDate != subjectData['currentLastDate']) {
+            setActiveDate(new Date(subjectData['currentLastDate']));
         }
         console.log(activeDate)
     }, []);
@@ -23,13 +22,35 @@ const Calendar = ({ subjectData }) => {
             const newDate = new Date(activeDate.setDate(item));
             setActiveDate(newDate);
             setModalVisible(modalVisible => !modalVisible);
-
         }
-
     };
+
 
     var rows = matrix.map((row, rowIndex) => {
         var rowItems = row.map((item, colIndex) => {
+            let color = "#fff";
+            if (item !== -1) {
+                let currDate = new Date();
+                currDate.setDate(item);
+                currDate.setMonth(activeDate.getMonth());
+                currDate.setFullYear(activeDate.getFullYear());
+                currDate = new Date(currDate).toDateString();
+                console.log(currDate)
+                if(subjectData['1'].includes(currDate)){
+                    color='green';
+                }
+                else if(subjectData['0'].includes(currDate)){
+                    color='red';
+                }
+                else if(subjectData['-1'].includes(currDate)) {
+                    color='#ff9595'
+                }
+                else{
+                    color="#000"
+                }
+            }
+
+
             return (
                 <Pressable
                     key={`${item}${colIndex}${rowIndex}${row}`}
@@ -43,7 +64,7 @@ const Calendar = ({ subjectData }) => {
                     <Text
                         style={{
                             textAlign: 'center',
-                            color: '#000',
+                            color,
                             fontWeight: item == activeDate.getDate() ? 'bold' : 'normal',
                             fontSize: 14
                         }}>
@@ -89,7 +110,7 @@ const Calendar = ({ subjectData }) => {
                 transparent={true}
                 visible={modalVisible}
             >
-                    <UpdateAttendance subject={subjectData['subject']} date={activeDate} setModalVisible={setModalVisible} />
+                <UpdateAttendance subject={subjectData['subject']} date={activeDate} setModalVisible={setModalVisible} />
             </Modal>
         </View>
     );
@@ -120,7 +141,8 @@ const styles = StyleSheet.create({
     actionContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        flex: 1
+        flex: 1,
+        marginVertical:20
     },
     currentDate: {
         fontWeight: '600',

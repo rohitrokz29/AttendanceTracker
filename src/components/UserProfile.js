@@ -88,16 +88,11 @@ const UserProfile = () => {
       <View style={styles.subjectList}>
         <FlatList
           data={subjectList}
-          keyExtractor={(item) => item.subject}
+          keyExtractor={(item) => item}
           ListEmptyComponent={<NoItem message="You Have No Subjects To Track" />}
           renderItem={({ item }) => {
-            let currentAbsent = item['currentAbsent']
-            let currentPresent = item['currentPresent']
-            const percentage = ((currentPresent * 100.0 / (currentAbsent + currentPresent)).toFixed(2));
             return <SubjectItem
-              subject={item['subject']}
-              percentage={percentage}
-              minRequired={item['minRequired']}
+              subject={item}
             />
           }}
         />

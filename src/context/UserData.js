@@ -8,7 +8,7 @@ export const UserState = ({ children }) => {
     const [user, setuser] = useState(null);
     const [subjectList, setsubjectList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const [updated,SetUpdated]=useState(false);
     useEffect(() => {
         const checkUser = async () => {
             try {
@@ -16,10 +16,8 @@ export const UserState = ({ children }) => {
                 if (result) {
                     result = await JSON.parse(result);
                     setuser(result);
-                    let subjects = await AsyncStorage.getItem('subjectList');
-                    subjects = await JSON.parse(subjects);
-                    subjectList.push(...subjects);
-                    console.log(subjectList);
+                    let subjects = await JSON.parse(await AsyncStorage.getItem('subjectList'));
+                    subjectList.unshift(...subjects);
                 }
             } catch (error) {
                 setuser(null);
@@ -48,8 +46,6 @@ export const UserState = ({ children }) => {
             console.error(error);
         }
     }
-
-
     const addSubject = async ({ subject, startDate, minRequired }) => {
         console.log({ subject, startDate, minRequired })
         /**
@@ -57,13 +53,8 @@ export const UserState = ({ children }) => {
          * add subject to subjectList array in both async storage and state
          */
         try {
-            let newSubject = {
-                subject,
-                currentPresent: 0,
-                currentAbsent: 0,
-                minRequired
-            };
-            subjectList.unshift(newSubject)
+
+            subjectList.unshift(subject)
             await AsyncStorage.setItem('subjectList', JSON.stringify(subjectList));
 
             let sub = {
@@ -71,18 +62,11 @@ export const UserState = ({ children }) => {
                 minRequired,
                 startDate,
                 currentLastDate: startDate,
-                '0': {}
+                1: ["1"],
+                0: ["0"],
+                "-1": [""]
             }
-            /**
-             * 0->startDate month
-             * 1->strtDate MOnth+1
-             * 0:{
-             *  'date1':0/1/-1,
-             * 'date2':0/1/-1
-             * ........
-             * ......
-             * .......
-             * }
+            /*
              * 0=>absent,1=>present,-1=>no class
              */
             await AsyncStorage.setItem(subject, JSON.stringify(sub));
@@ -102,6 +86,7 @@ export const UserState = ({ children }) => {
             return null;
         }
     }
+
     return (
         <UserContext.Provider
             value={{
@@ -111,7 +96,9 @@ export const UserState = ({ children }) => {
                 storeUser,
                 addSubject,
                 clearData,
-                clearSubjects
+                clearSubjects,
+                updated,
+                SetUpdated
             }}
         >
             {children}

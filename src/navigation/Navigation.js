@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "../components/Home";
@@ -23,6 +23,7 @@ const GetStartedScreens = () => {
 
 const SubjectListStack = createNativeStackNavigator();
 const SubjectListScreens = () => {
+    
     return (
         <SubjectListStack.Navigator screenOptions={{ headerShown: false }}>
             <SubjectListStack.Screen name="SubjectList" component={SubjectList} />
@@ -36,7 +37,6 @@ const Tab = createBottomTabNavigator();
 const AppScreens = () => {
     return (
         <Tab.Navigator
-            initialRouteName="subjectList"
             tabBarOptions={{
                 activeTintColor: '#ff8070',
                 inactiveTintColor: "#fff",
