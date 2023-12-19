@@ -20,7 +20,6 @@ const Subject = ({ navigation, route }) => {
       let res = await AsyncStorage.getItem(subject);
       res = await JSON.parse(res);
       setSubjectData(res)
-      console.log(subjectData['startDate'])
       setLoading(false)
     }
 

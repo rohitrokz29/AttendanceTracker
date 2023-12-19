@@ -12,7 +12,6 @@ const Calendar = ({ subjectData }) => {
         if (activeDate != subjectData['currentLastDate']) {
             setActiveDate(new Date(subjectData['currentLastDate']));
         }
-        console.log(activeDate)
     }, []);
 
     var matrix = generateMatrix(activeDate);
@@ -35,7 +34,6 @@ const Calendar = ({ subjectData }) => {
                 currDate.setMonth(activeDate.getMonth());
                 currDate.setFullYear(activeDate.getFullYear());
                 currDate = new Date(currDate).toDateString();
-                console.log(currDate)
                 if(subjectData['1'].includes(currDate)){
                     color='green';
                 }
