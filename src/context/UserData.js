@@ -70,6 +70,7 @@ export const UserState = ({ children }) => {
              * 0=>absent,1=>present,-1=>no class
              */
             await AsyncStorage.setItem(subject, JSON.stringify(sub));
+            SetUpdated(updated=>!updated)
             return true;
         } catch (error) {
             return null;
@@ -78,7 +79,7 @@ export const UserState = ({ children }) => {
     const clearSubjects = async () => {
         try {
             subjectList.forEach(async (subject) => {
-                await AsyncStorage.removeItem(subject['subject']);
+                await AsyncStorage.removeItem(subject);
             })
             setsubjectList([]);
             return true;
@@ -86,7 +87,13 @@ export const UserState = ({ children }) => {
             return null;
         }
     }
-
+    const deleteOneSubject=async ({subject})=>{
+        try {
+            return true;
+        } catch (error) {
+            return null;
+        }
+    }
     return (
         <UserContext.Provider
             value={{
@@ -98,7 +105,8 @@ export const UserState = ({ children }) => {
                 clearData,
                 clearSubjects,
                 updated,
-                SetUpdated
+                SetUpdated,
+                deleteOneSubject
             }}
         >
             {children}

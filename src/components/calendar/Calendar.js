@@ -3,6 +3,7 @@ import { generateMatrix } from './MonthMatrix';
 import { Pressable, View, Text, Button, StyleSheet, Modal } from 'react-native';
 import { months } from './MonthMatrix';
 import UpdateAttendance from './UpdateAttendance';
+import { AntDesign } from '@expo/vector-icons';
 const Calendar = ({ subjectData }) => {
 
     const [activeDate, setActiveDate] = useState(new Date(subjectData['startDate']));
@@ -20,6 +21,9 @@ const Calendar = ({ subjectData }) => {
         if (typeof item !== 'string' && item !== -1) {
             const newDate = new Date(activeDate.setDate(item));
             setActiveDate(newDate);
+            if (activeDate < (new Date(subjectData['startDate']))) {
+                return;
+            }
             setModalVisible(modalVisible => !modalVisible);
         }
     };
@@ -27,24 +31,25 @@ const Calendar = ({ subjectData }) => {
 
     var rows = matrix.map((row, rowIndex) => {
         var rowItems = row.map((item, colIndex) => {
-            let color = "#fff";
-            if (item !== -1) {
+            let color = "#000";
+
+            if (rowIndex !== 0 && item !== -1) {
                 let currDate = new Date();
                 currDate.setDate(item);
                 currDate.setMonth(activeDate.getMonth());
                 currDate.setFullYear(activeDate.getFullYear());
                 currDate = new Date(currDate).toDateString();
-                if(subjectData['1'].includes(currDate)){
-                    color='green';
+                if (subjectData['1'].includes(currDate)) {
+                    color = 'green';
                 }
-                else if(subjectData['0'].includes(currDate)){
-                    color='red';
+                else if (subjectData['0'].includes(currDate)) {
+                    color = 'red';
                 }
-                else if(subjectData['-1'].includes(currDate)) {
-                    color='#ff9595'
+                else if (subjectData['-1'].includes(currDate)) {
+                    color = '#ff9595'
                 }
-                else{
-                    color="#000"
+                else {
+                    color = "#000"
                 }
             }
 
@@ -89,18 +94,28 @@ const Calendar = ({ subjectData }) => {
             <View>{rows}</View>
             <View key={'buttons'} style={styles.actionContainer}>
                 <View key={"prev"} style={{ flex: 1, marginHorizontal: 2 }}>
-                    <Button
-                        title="Previous"
+                    <Pressable
                         color={"#000"}
                         onPress={() => changeMonth(-1)}
-                    />
+                        style={{
+                            alignItems: 'center',
+                            backgroundColor:'#000',
+                        }}
+                    >
+                        <AntDesign name="arrowleft" size={24} color="#fff" />
+                    </Pressable>
                 </View>
                 <View key={"next"} style={{ flex: 1, marginHorizontal: 2 }}>
-                    <Button
-                        title="Next"
+                    <Pressable
                         color={"#000"}
                         onPress={() => changeMonth(+1)}
-                    />
+                        style={{
+                            alignItems: 'center',
+                            backgroundColor:'#000',
+                        }}
+                    >
+                        <AntDesign name="arrowright" size={24} color="#fff" />
+                    </Pressable>
                 </View>
             </View>
             <Modal
@@ -140,7 +155,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         flex: 1,
-        marginVertical:20
+        marginVertical: 20
     },
     currentDate: {
         fontWeight: '600',

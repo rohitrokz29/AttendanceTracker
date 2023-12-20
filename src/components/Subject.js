@@ -4,23 +4,27 @@ import { View, Text, SafeAreaView, StyleSheet, StatusBar, Pressable } from 'reac
 import Heading from './Heading';
 import Calendar from './calendar/Calendar';
 import { useUserContext } from '../context/UserData';
+import SubjectDetails from './calendar/SubjectDetails';
 
 
 const Subject = ({ navigation, route }) => {
   const { subject } = route.params;
   const [subjectData, setSubjectData] = useState({})
   const [loading, setLoading] = useState(true);
-  const {updated}=useUserContext();
+  const { updated } = useUserContext();
 
 
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
+      console.log(subjectData)
+
       let res = await AsyncStorage.getItem(subject);
       res = await JSON.parse(res);
-      setSubjectData(res)
-      setLoading(false)
+      Object.assign(subjectData,res)
+      console.log(subjectData)
+      setLoading(false);
     }
 
     getData();
@@ -31,7 +35,11 @@ const Subject = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <Heading heading={subject} />
       {
-        !loading && <Calendar subjectData={subjectData} />
+        !loading &&
+        <>
+        <SubjectDetails subjectData={subjectData}/>
+          <Calendar subjectData={subjectData} />
+        </>
       }
     </SafeAreaView>
   )

@@ -24,7 +24,6 @@ const UpdateAttendance = ({ date, subject, setModalVisible }) => {
                 subjectData[status].unshift(date);
             }
             subjectData['currentLastDate']=date;
-            Object.assign(subjectData)
             await AsyncStorage.setItem(subject, JSON.stringify(subjectData));
             SetUpdated(update => !update)
 

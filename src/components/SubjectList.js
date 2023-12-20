@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Pressable, SafeAreaView, Text, View, StyleSheet, FlatList, Modal } from 'react-native'
+import { Pressable, SafeAreaView, ActivityIndicator, Text, View, StyleSheet, FlatList, Modal } from 'react-native'
 import Heading from './Heading'
 import { useUserContext } from '../context/UserData'
 import SubjectItem from './SubjectItem'
@@ -8,7 +8,7 @@ import NoItem from './NoItem'
 import AddSubjectModal from './AddSubjectModal'
 
 const SubjectList = ({ navigation }) => {
-    const { subjectList, } = useUserContext();
+    const { subjectList, isLoading } = useUserContext();
     const [modalVisible, setModalVisible] = useState(false);
 
     return (
@@ -16,20 +16,22 @@ const SubjectList = ({ navigation }) => {
             <Heading heading={"Subject List"} />
 
             {
-                (subjectList) &&
-                <FlatList
-                    data={subjectList}
-                    ListEmptyComponent={<NoItem message={"NO Subjects to Show "} />}
-                    renderItem={({ item }) => {
-                        return (
-                            <SubjectItem
-                                subject={item}
-                                navigation={navigation}
-                            />
-                        )
-                    }
-                    }
-                />
+                (isLoading) ? <ActivityIndicator size={'large'} color={'black'} />
+                    :
+                    (subjectList) &&
+                    <FlatList
+                        data={subjectList}
+                        ListEmptyComponent={<NoItem message={"NO Subjects to Show "} />}
+                        renderItem={({ item }) => {
+                            return (
+                                <SubjectItem
+                                    subject={item}
+                                    navigation={navigation}
+                                />
+                            )
+                        }
+                        }
+                    />
             }
             <Pressable key="add-subject"
                 onPress={() => setModalVisible(!modalVisible)}
